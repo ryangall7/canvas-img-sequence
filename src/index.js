@@ -1,5 +1,4 @@
 import { createImageQueue } from 'load-image-queue';
-import { gsap } from "gsap";
 
 export const ImgSequenceCanvas = class ImgSequenceCanvas{
   constructor(el, config){
@@ -75,44 +74,5 @@ export const ImgSequenceCanvas = class ImgSequenceCanvas{
         this.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, this.$canvas[0].width, this.$canvas[0].height);
       }
     }
-  }
-}
-
-export const ImgSequenceHover = class ImgSequenceHover{
-  constructor(el, config){
-    this.config = {
-      duration: 1,
-      yoyo: true,
-      images: [],
-      ...config}
-    this.animationCanvas = new ImgSequenceCanvas(el, this.config);
-
-    this.$triggerEl = $(el).closest(this.config.trigger)
-    this.init();
-  }
-
-  init(){
-
-    const length = this.config.images.length;
-    let playCoefficent = length / this.config.duration;
-
-    this.tl = gsap.timeline({
-      paused: true,
-      yoyo: this.config.yoyo,
-      repeat: 1
-    });
-
-    this.tl.to(this.el, {
-      duration: this.config.duration,
-      onUpdate: (progress) => {
-        let frame =  Math.floor(this.tl.progress() * length);
-        this.animationCanvas.setCanvasFrame(frame);
-      }
-    });
-
-    this.$triggerEl.on("mouseenter", () => {
-      this.tl.restart();
-    });
-
   }
 }
