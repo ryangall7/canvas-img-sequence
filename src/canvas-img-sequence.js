@@ -15,7 +15,8 @@ export const ImgSequenceCanvas = class ImgSequenceCanvas{
   init = () => {
     this.buildCanvas();
     this.setUpImages();
-    this.setFirstFrame()
+    this.setFirstFrame();
+    this.config.observer && this.setUpObsever()
   }
 
   setUpImages = ()=>{
@@ -64,6 +65,23 @@ export const ImgSequenceCanvas = class ImgSequenceCanvas{
     this.$canvas = $(`<canvas height="${this.config.height}" width="${this.config.width}"></canvas>`);
     this.$el.append(this.$canvas);
     this.context = this.$canvas[0].getContext("2d");
+  }
+
+  setUpObsever = () => {
+    const mutationConfig = { attributes: true, childList: true, subtree: true };
+
+    this.observer = new MutationObserver(this.handleMutation);
+
+    this.observer.observe(this.$el[0], mutationConfig);
+  }
+
+  handleMutation = (mutationsList, observer) => {
+    for(const mutation of mutationsList) {
+        if (mutation.type === 'attributes' && mutation.attributeName == "frame") {
+            const frame = Math.floor(mutation.target.getAttribute("frame"));
+            this.setCanvasFrame(frame);
+        }
+    }
   }
 
   setCanvasFrame = (currentFrame) => {
