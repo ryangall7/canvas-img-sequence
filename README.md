@@ -28,7 +28,7 @@ Usage
   ```
 
 **Animate:**
-Just change the `frame` attr on the `<canvas id="animated-canvas" frame=1 ></canvas>`
+Just change the `frame` attr on the `<div id="animated-canvas" frame=1 ></div>`
 
 ```js
 

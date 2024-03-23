@@ -2,7 +2,7 @@ import { createImageQueue } from 'load-image-queue';
 
 export const ImgSequenceCanvas = class ImgSequenceCanvas{
   constructor(el, config){
-    this.$el = $(el);
+    this.el = el;
     this.config = {
       height: 730,
       width: 1000,
@@ -62,9 +62,14 @@ export const ImgSequenceCanvas = class ImgSequenceCanvas{
   }
 
   buildCanvas = ()=>{
-    this.$canvas = $(`<canvas height="${this.config.height}" width="${this.config.width}"></canvas>`);
-    this.$el.append(this.$canvas);
-    this.context = this.$canvas[0].getContext("2d");
+    //this.$canvas = $(`<canvas height="${this.config.height}" width="${this.config.width}"></canvas>`);
+    this.canvas = document.createElement("canvas");
+    this.canvas.height = this.config.height;
+    this.canvas.width = this.config.width;
+
+    //this.$el.append(this.$canvas);
+    this.el.appendChild(this.canvas);
+    this.context = this.canvas.getContext("2d");
   }
 
   setUpObsever = () => {
@@ -72,7 +77,7 @@ export const ImgSequenceCanvas = class ImgSequenceCanvas{
 
     this.observer = new MutationObserver(this.handleMutation);
 
-    this.observer.observe(this.$el[0], mutationConfig);
+    this.observer.observe(this.el, mutationConfig);
   }
 
   handleMutation = (mutationsList, observer) => {
@@ -89,7 +94,7 @@ export const ImgSequenceCanvas = class ImgSequenceCanvas{
       this.currentFrame = currentFrame;
       var img = this.images[currentFrame].img;
       if(img.naturalWidth > 0){
-        this.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, this.$canvas[0].width, this.$canvas[0].height);
+        this.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, this.canvas.width, this.canvas.height);
       }
     }
   }
