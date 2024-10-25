@@ -1,6 +1,6 @@
 import { createImageQueue } from 'load-image-queue';
 
-export const ImgSequenceCanvas = class ImgSequenceCanvas{
+export const CanvasImgSequence = class CanvasImgSequence{
   constructor(el, config){
     this.el = el;
     this.config = {

@@ -4,7 +4,7 @@ Usage
 **Setup:**
 ```js
 
-  import { ImgSequenceCanvas } from "canvas-img-sequence";
+  import { CanvasImgSequence } from "canvas-img-sequence";
 
   const config = {
       width: 1080,
@@ -22,7 +22,7 @@ Usage
 
   const el = document.getElementByID("animated-canvas")
 
-  const canvas = new ImgSequenceCanvas(el, config);
+  const canvas = new CanvasImgSequence(el, config);
 
 
   ```

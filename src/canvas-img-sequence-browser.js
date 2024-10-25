@@ -1,3 +1,3 @@
-import {ImgSequenceCanvas} from "./canvas-img-sequence.js"
+import {CanvasImgSequence} from "./canvas-img-sequence.js"
 
-window.ImgSequenceCanvas = ImgSequenceCanvas;
+window.CanvasImgSequence = CanvasImgSequence;
