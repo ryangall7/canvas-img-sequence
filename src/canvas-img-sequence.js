@@ -94,6 +94,7 @@ export const ImgSequenceCanvas = class ImgSequenceCanvas{
       this.currentFrame = currentFrame;
       var img = this.images[currentFrame].img;
       if(img.naturalWidth > 0){
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, this.canvas.width, this.canvas.height);
       }
     }
