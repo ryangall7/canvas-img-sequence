@@ -1,6 +1,6 @@
 {
   "name": "canvas-img-sequence",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple module to create image sequences on canvas elements",
   "repository": "git://ryangall7/canvas-img-sequence.git",
   "main": "./src/canvas-img-sequence.js",
