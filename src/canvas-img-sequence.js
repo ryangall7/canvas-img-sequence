@@ -16,41 +16,42 @@ export const CanvasImgSequence = class CanvasImgSequence{
     this.buildCanvas();
     this.setUpImages();
     this.setFirstFrame();
-    this.config.observer && this.setUpObsever()
+    this.config.observer && this.setUpObserver()
   }
 
   setUpImages = ()=>{
     this.queue = window.CanvasQueue || createImageQueue(10);
     window.CanvasQueue = this.queue;
     this.images = this.config.images.map(this.buildImgObject)
-
   }
 
   setFirstFrame = () => {
     var cached = this.loadImage(0);
-    if(cached)
-    {
-      this.setCanvasFrame(0);
+    var frame = this.el.getAttribute("frame") || 0;
+    if(cached){
+      this.setCanvasFrame(frame, true);
     }else{
       var self = this;
-      this.images[0].img.addEventListener("load", function(){
-        self.setCanvasFrame(0);
+      this.images[frame].img.addEventListener("load", function(){
+        self.setCanvasFrame(frame, true);
       });
     }
   }
 
   buildImgObject = (src, index) => {
     const img = new Image();
+    const imgObject = {};
 
     let queueEntry = this.queue.add(src, (url)=>{
       this.loadImage(index);
+      imgObject.loaded = true;
     }, (e) => {console.error(e)});
 
-    return {
-      img : img,
-      src : src,
-      queueEntry: queueEntry
-    };
+    imgObject.img = img;
+    imgObject.src = src;
+    imgObject.queueEntry = queueEntry;
+
+    return imgObject;
   }
 
   loadImage = (i)=>{
@@ -72,11 +73,10 @@ export const CanvasImgSequence = class CanvasImgSequence{
     this.context = this.canvas.getContext("2d");
   }
 
-  setUpObsever = () => {
+  setUpObserver = () => {
     const mutationConfig = { attributes: true, childList: true, subtree: true };
 
     this.observer = new MutationObserver(this.handleMutation);
-
     this.observer.observe(this.el, mutationConfig);
   }
 
@@ -89,13 +89,18 @@ export const CanvasImgSequence = class CanvasImgSequence{
     }
   }
 
-  setCanvasFrame = (currentFrame) => {
-    if( currentFrame != this.currentFrame && this.images[currentFrame] ){
-      this.currentFrame = currentFrame;
+  setCanvasFrame = (currentFrame, force) => {
+    if(force || currentFrame != this.currentFrame && this.images[currentFrame] ){
+      this.updateTimeout && clearTimeout(this.updateTimeout);
       var img = this.images[currentFrame].img;
       if(img.naturalWidth > 0){
+        this.currentFrame = currentFrame;
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, this.canvas.width, this.canvas.height);
+      }else{
+        this.updateTimeout = window.setTimeout(()=>{
+          this.setCanvasFrame(currentFrame);
+        }, 100);
       }
     }
   }
